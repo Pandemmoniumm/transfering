@@ -1,0 +1,81 @@
+#!/bin/sh
+
+# Define modifiers and default applications
+MOD="Super"
+terminal="kitty"
+fileManager="kitty -e yazi"
+browser="firefox"
+
+# Fix the upside-down cursor bug inside VMs
+riverctl xcursor-theme Adwaita 24
+
+# more precise resizing with use of submaps
+riverctl declare-mode resize
+riverctl map normal $MOD R enter-mode resize
+
+riverctl map resize None L send-layout-cmd luatile "main-ratio +0.05"
+riverctl map resize None H send-layout-cmd luatile "main-ratio -0.05"
+riverctl map resize None K resize-view 0 10
+riverctl map resize None J resize-view 0 -10
+riverctl map resize None Escape enter-mode normal
+
+# APPS
+riverctl map normal $MOD T spawn "$terminal"
+riverctl map normal $MOD F spawn "$fileManager"
+riverctl map normal $MOD W spawn "$browser"
+
+# minimizing (simulated via tag 32 bitmask)
+SPECIAL_TAG=2147483648
+riverctl map normal $MOD M set-view-tags $SPECIAL_TAG
+riverctl map normal $MOD+Shift M toggle-focused-tags $SPECIAL_TAG
+
+# WINDOW ACTIONS
+riverctl map normal $MOD C close
+riverctl map normal $MOD Q close
+riverctl map normal $MOD V toggle-float
+
+# Focus Navigation
+riverctl map normal $MOD H focus-view left
+riverctl map normal $MOD J focus-view down
+riverctl map normal $MOD K focus-view up
+riverctl map normal $MOD L focus-view right
+
+# DWINDLE LAYOUT (adapted for layout plugin commands)
+riverctl map normal $MOD Return toggle-fullscreen
+riverctl map normal $MOD S send-layout-cmd luatile "toggle-orientation"
+riverctl map normal $MOD P send-layout-cmd luatile "main-count +1"
+riverctl map normal $MOD+Shift H swap left
+riverctl map normal $MOD+Shift J swap down
+riverctl map normal $MOD+Shift K swap up
+riverctl map normal $MOD+Shift L swap right
+
+# MONITORS
+riverctl map normal $MOD+Control 1 focus-output next
+riverctl map normal $MOD+Control 2 focus-output previous
+riverctl map normal $MOD+Control+Shift 1 send-to-output next
+riverctl map normal $MOD+Control+Shift 2 send-to-output previous
+
+# WORKSPACES
+for i in $(seq 1 9); do
+    ws=$((1 << ($i - 1)))
+    riverctl map normal $MOD $i set-focused-tags $ws
+    riverctl map normal $MOD+Shift $i set-view-tags $ws
+done
+
+# FLOATING RULES
+riverctl float-filter-add app-id "pavucontrol"
+
+# Media Keys
+riverctl map normal None XF86AudioRaiseVolume spawn "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+riverctl map normal None XF86AudioLowerVolume spawn "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+riverctl map normal None XF86AudioMute        spawn "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+riverctl map normal None XF86AudioMicMute     spawn "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+riverctl map normal None XF86MonBrightnessUp   spawn "brightnessctl set +5%"
+riverctl map normal None XF86MonBrightnessDown spawn "brightnessctl set 5%-"
+
+# Background Daemons
+swww-daemon &
+waybar &
+swaync &
+river-luatile &
+riverctl default-layout luatile
