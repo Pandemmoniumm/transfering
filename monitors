@@ -1,0 +1,2 @@
+riverctl configure-output * mode 1920x1080@60Hz
+riverctl configure-output * scale 1.0
