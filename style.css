@@ -1,0 +1,37 @@
+/*====================*/
+/*   Import Colors    */
+/*====================*/
+@import "colors.css";
+
+/*========================*/
+/*       Waybar           */
+/*========================*/
+window#waybar {
+    background-color: @base;
+    color: @text;
+    border-bottom: 2px solid @surface1;
+}
+
+/*========================*/
+/*     River Tags         */
+/*========================*/
+#tags button {
+    padding: 0 5px;
+    color: @overlay0;
+}
+
+/* When a workspace is currently active/focused */
+#tags button.focused {
+    color: @mauve;
+    font-weight: bold;
+}
+
+/* When a workspace has open applications inside it */
+#tags button.occupied {
+    color: @text;
+}
+
+/* Urgent notification workspace focus */
+#tags button.urgent {
+    color: @red;
+}
