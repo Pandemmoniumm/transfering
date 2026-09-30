@@ -1,0 +1,8 @@
+# Background Daemons
+swww-daemon &
+waybar &
+swaync &
+
+# Layout Engine Setup
+river-luatile &
+riverctl default-layout luatile
