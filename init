@@ -1,0 +1,8 @@
+#!/bin/sh
+
+. "$HOME/.config/river/variables"
+. "$HOME/.config/river/monitors"
+. "$HOME/.config/river/winrules"
+. "$HOME/.config/river/input"
+. "$HOME/.config/river/keybinds"
+. "$HOME/.config/river/autostart"
