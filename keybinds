@@ -1,0 +1,80 @@
+# Declare the custom resize mode
+riverctl declare-mode resize
+
+# Switch to a submap called `resize`.
+riverctl map normal \$MOD R enter-mode resize
+
+# Start a submap called "resize". Set repeating binds for resizing.
+riverctl map resize None L send-layout-cmd luatile "main-ratio +0.05"
+riverctl map resize None H send-layout-cmd luatile "main-ratio -0.05"
+riverctl map resize None K resize-view 0 10
+riverctl map resize None J resize-view 0 -10
+
+# Use `reset` to go back to the global submap
+riverctl map resize None Escape enter-mode normal
+
+# APPS
+# Super + T to open Terminal
+riverctl map normal \$MOD T spawn "\$terminal"
+# Super + F to open File Manager
+riverctl map normal \$MOD F spawn "\$fileManager"
+# Super + W to open browser
+riverctl map normal \$MOD W spawn "\$browser"
+
+# minimizing
+# Super + M to minimize focused window
+riverctl map normal MOD M set-view-tags SPECIAL_TAG
+# Super + Shift + M to view minimized windows
+riverctl map normal MOD+Shift M toggle-focused-tags SPECIAL_TAG
+
+# WINDOW ACTIONS
+# Super + C to close window
+riverctl map normal \$MOD C close
+# Super + Q to kill the window/process
+riverctl map normal \$MOD Q close
+# Super + V to toggle the focused window between floating and tiling
+riverctl map normal \$MOD V toggle-float
+
+# Focus Navigation
+riverctl map normal \$MOD H focus-view left
+riverctl map normal \$MOD J focus-view down
+riverctl map normal \$MOD K focus-view up
+riverctl map normal \$MOD L focus-view right
+
+# DWINDLE LAYOUT
+# Super + Return to toggle Fullscreen mode on the active window
+riverctl map normal \$MOD Return toggle-fullscreen
+# Super + S to change the split direction manually for the next window
+riverctl map normal \$MOD S send-layout-cmd luatile "toggle-orientation"
+# Super + P to toggle Pseudotiling
+riverctl map normal \$MOD P send-layout-cmd luatile "main-count +1"
+# Swap a window with its neighbor
+riverctl map normal \$MOD+Shift H swap left
+riverctl map normal \$MOD+Shift J swap down
+riverctl map normal \$MOD+Shift K swap up
+riverctl map normal \$MOD+Shift L swap right
+
+# MONITORS
+# Focus switch
+riverctl map normal \$MOD+Control 1 focus-output next
+riverctl map normal \$MOD+Control 2 focus-output previous
+# Send window silently
+riverctl map normal \$MOD+Control+Shift 1 send-to-output next
+riverctl map normal \$MOD+Control+Shift 2 send-to-output previous
+
+# WORKSPACES
+for i in \$(seq 1 9); do
+    ws=((1 << (i - 1)))
+    # Super + [1-9] to switch workspaces
+    riverctl map normal \$MOD i set-focused-tags ws
+    # Super + Shift + [1-9] to send focused window to workspace
+    riverctl map normal \$MOD+Shift i set-view-tags ws
+done
+
+# Media Keys
+riverctl map normal None XF86AudioRaiseVolume spawn "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+riverctl map normal None XF86AudioLowerVolume spawn "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+riverctl map normal None XF86AudioMute        spawn "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+riverctl map normal None XF86AudioMicMute     spawn "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+riverctl map normal None XF86MonBrightnessUp   spawn "brightnessctl set +5%"
+riverctl map normal None XF86MonBrightnessDown spawn "brightnessctl set 5%-"
