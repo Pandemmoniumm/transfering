@@ -1,0 +1,7 @@
+# Sizing and framing variables
+riverctl set-gaps 0
+riverctl border-width 2
+
+# Focused and background border styling
+riverctl border-color-focused "0x33ccff"
+riverctl border-color-unfocused "0x595959"
