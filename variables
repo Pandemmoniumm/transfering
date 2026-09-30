@@ -1,0 +1,5 @@
+MOD="Super"
+terminal="kitty"
+fileManager="kitty -e yazi"
+browser="firefox"
+SPECIAL_TAG=2147483648
