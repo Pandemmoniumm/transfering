@@ -1,0 +1,7 @@
+# Hardware mapping controls
+riverctl keyboard-layout us
+riverctl pointer-accel 0
+riverctl pointer-accel -0.5
+
+# Under-the-hood pointer profiles
+export LIBINPUT_CONFIG_TAP_TO_CLICK=1
